@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Virtual Keyboard</title>
+  <meta name="description" content="AI-powered virtual keyboard controlled by hand gestures via your camera." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="site-wrap">
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <!-- Hero Section -->
+    <header class="hero" role="banner">
+      <span class="badge" aria-hidden="true">⚡ Powered by AI &amp; Computer Vision</span>
+      <h1 class="title"><span class="title-gradient">AI Virtual Keyboard</span></h1>
+      <p class="sub">Control your keyboard using <span class="em">hand symbols</span> through your camera</p>
+      <div class="hero-actions">
+        <button id="startCamera" class="btn btn-primary" aria-label="Start camera to control keyboard">🎥 Start Camera</button>
+      </div>
+    </header>
+
+    <!-- Feature Cards -->
+    <section class="features" aria-labelledby="features-heading">
+      <h2 id="features-heading" class="sr-only">Features</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <!-- Gesture SVG -->
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 14l1-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 14l-1-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Gesture Control</h3>
+          <p>Use natural hand gestures to type — fast and intuitive.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <!-- Real-time SVG -->
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4l2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Real-time Detection</h3>
+          <p>Instant recognition and responsive feedback for every move.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">
+            <!-- AI SVG -->
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 8h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 16h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>AI Powered</h3>
+          <p>Advanced computer vision models run locally and in real-time.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Camera Section -->
+    <section class="camera-section" aria-labelledby="camera-heading">
+      <h2 id="camera-heading" class="sr-only">Camera</h2>
+      <div class="camera-card">
+        <div class="camera-top">
+          <span class="camera-label">Live Preview</span>
+        </div>
+
+        <!-- Two-column layout: left (video), right (status + command + output) -->
+        <div class="camera-body">
+          <div class="left-panel">
+            <div class="video-wrap">
+              <video id="video" autoplay playsinline muted aria-label="Camera preview"></video>
+              <canvas id="overlay" aria-hidden="true"></canvas>
+            </div>
+          </div>
+
+          <aside class="right-panel" aria-label="Detections and commands">
+            <div class="status-card card small">
+              <div class="label">Hand Status</div>
+              <div id="status" class="status no-hand">No hand detected</div>
+            </div>
+
+            <div class="detected-card card">
+              <div class="label">Detected Gesture</div>
+              <div id="detected-gesture" class="detected-gesture">—</div>
+            </div>
+
+            <div class="command-card card">
+              <div class="label">Command</div>
+              <div id="command-executed" class="command-executed">—</div>
+            </div>
+
+            <label class="sr-only" for="output">Typed output</label>
+            <textarea id="output" aria-label="Detected text output" placeholder="Text will appear here..."></textarea>
+
+            <!-- Virtual Keyboard / Command Legend moved into right panel for clarity -->
+            <div class="vk-panel" role="region" aria-labelledby="vk-heading">
+              <h3 id="vk-heading">Virtual Keyboard</h3>
+              <p class="vk-desc">Quick reference of gesture commands for typing letters and editing.</p>
+              <div class="vk-grid" role="list">
+                <div class="vk-item" data-command="A" role="listitem" aria-label="Index finger - A"> 
+                  <div class="vk-gesture">☝️</div>
+                  <div class="vk-command">Index → <strong>A</strong></div>
+                </div>
+                <div class="vk-item" data-command="B" role="listitem" aria-label="Index + Middle - B">
+                  <div class="vk-gesture">✌️</div>
+                  <div class="vk-command">Index + Mid → <strong>B</strong></div>
+                </div>
+                <div class="vk-item" data-command="C" role="listitem" aria-label="3 fingers - C">
+                  <div class="vk-gesture">🤟</div>
+                  <div class="vk-command">3 fingers → <strong>C</strong></div>
+                </div>
+                <div class="vk-item" data-command="D" role="listitem" aria-label="4 fingers - D">
+                  <div class="vk-gesture">🖖</div>
+                  <div class="vk-command">4 fingers → <strong>D</strong></div>
+                </div>
+                <div class="vk-item" data-command="E" role="listitem" aria-label="Index + Ring - E">
+                  <div class="vk-gesture">🤘</div>
+                  <div class="vk-command">Index + Ring → <strong>E</strong></div>
+                </div>
+                <div class="vk-item" data-command="F" role="listitem" aria-label="Mid + Ring + Pinky - F">
+                  <div class="vk-gesture">🤙</div>
+                  <div class="vk-command">Mid+Ring+Pinky → <strong>F</strong></div>
+                </div>
+                <div class="vk-item" data-command="G" role="listitem" aria-label="Middle + Ring - G">
+                  <div class="vk-gesture">✊</div>
+                  <div class="vk-command">Mid + Ring → <strong>G</strong></div>
+                </div>
+                <div class="vk-item" data-command="H" role="listitem" aria-label="Middle only - H">
+                  <div class="vk-gesture">🖕</div>
+                  <div class="vk-command">Middle → <strong>H</strong></div>
+                </div>
+                <div class="vk-item" data-command="I" role="listitem" aria-label="Ring only - I">
+                  <div class="vk-gesture">💍</div>
+                  <div class="vk-command">Ring → <strong>I</strong></div>
+                </div>
+                <div class="vk-item" data-command="J" role="listitem" aria-label="Pinky only - J">
+                  <div class="vk-gesture">🤙</div>
+                  <div class="vk-command">Pinky → <strong>J</strong></div>
+                </div>
+                <div class="vk-item" data-command="SPACE" role="listitem" aria-label="Open palm - space">
+                  <div class="vk-gesture">🖐️</div>
+                  <div class="vk-command">Open palm → <strong>Space</strong></div>
+                </div>
+                <div class="vk-item" data-command="BACKSPACE" role="listitem" aria-label="Closed fist - backspace">
+                  <div class="vk-gesture">✊</div>
+                  <div class="vk-command">Fist → <strong>Backspace</strong></div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" aria-labelledby="how-heading">
+      <h2 id="how-heading" class="section-title">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">📷</div>
+          <div class="step-text">Camera Activation</div>
+        </div>
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">✋</div>
+          <div class="step-text">Hand Symbol Recognition</div>
+        </div>
+        <div class="step">
+          <div class="step-icon" aria-hidden="true">⌨</div>
+          <div class="step-text">Virtual Key Action</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
